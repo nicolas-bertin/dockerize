@@ -20,7 +20,7 @@ func file(file string) (string, error) {
         if err != nil {
                 log.Fatalf("unable to read file %s: %s", file, err)
         }
-        return string(content), err
+        return strings.TrimRight(string(content), "\r\n"), nil
 }
 
 func exeCmd(cmd string) (string, error) {
@@ -34,9 +34,9 @@ func exeCmd(cmd string) (string, error) {
                 if err != nil {
                         log.Fatalf("unable to run command :%s", err)
                 }
-                return string(out), err
+                return strings.TrimRight(string(out), "\r\n"), nil
         }
-        return "", err
+        return "", nil
 }
 
 func exists(path string) (bool, error) {
