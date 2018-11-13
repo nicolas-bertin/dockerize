@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/url"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -14,6 +15,29 @@ import (
 
 	"github.com/jwilder/gojq"
 )
+func file(file string) (string, error) {
+        content, err := ioutil.ReadFile(file)
+        if err != nil {
+                log.Fatalf("unable to read file %s: %s", file, err)
+        }
+        return string(content), err
+}
+
+func exeCmd(cmd string) (string, error) {
+        args := strings.Fields(cmd)
+        exe, err := exec.LookPath(args[0])
+        args = args[1:len(args)]
+        if err != nil {
+                log.Fatalf("unable to find command %s: %s", args[0], err)
+        } else {
+                out, err := exec.Command(exe,args...).Output()
+                if err != nil {
+                        log.Fatalf("unable to run command :%s", err)
+                }
+                return string(out), err
+        }
+        return "", err
+}
 
 func exists(path string) (bool, error) {
 	_, err := os.Stat(path)
@@ -130,6 +154,8 @@ func generateFile(templatePath, destPath string) bool {
 		"upper":     strings.ToUpper,
 		"jsonQuery": jsonQuery,
 		"loop":      loop,
+                "file":      file,
+                "exeCmd":    exeCmd,
 	})
 
 	if len(delims) > 0 {

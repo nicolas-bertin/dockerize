@@ -178,6 +178,8 @@ There are a few built in functions as well:
   * `upper $value` - Uppercase a string.
   * `jsonQuery $json $query` - Returns the result of a selection query against a json document.
   * `loop` - Create for loops.
+  * `file` - Returns the content of the file as a string.
+  * `exeCmd` - Returns stdout of a simple unix command as a string.
 
 ### jsonQuery
 
